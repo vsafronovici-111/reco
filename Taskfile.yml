@@ -1,0 +1,34 @@
+version: '3'
+
+tasks:
+  run:server:
+    desc: Run the application with postgres
+    cmds:
+      - task: docker:up
+      - task: run:app
+
+  run:app:
+    desc: Run the application (without docker)
+    cmds:
+      - go run .
+    env:
+      JOB_TIMEOUT: "30"
+      ASANA_TOKEN: "2/1213491405308883/1213491490135471:88dae8f4caff2ea0fa8c2740f29cd09e"
+
+  docker:up:
+    desc: Start docker-compose services
+    dir: docker
+    cmds:
+      - docker-compose up -d
+
+  docker:down:
+    desc: Stop docker-compose services
+    dir: docker
+    cmds:
+      - docker-compose down
+
+  start:all:
+    desc: Start docker services and the application
+    cmds:
+      - task: docker:up
+      - task: run:server
